@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "194611987940",
+    "project_id": "flutter-sns-spp",
+    "storage_bucket": "flutter-sns-spp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194611987940:android:9d0fc2badf85dba4af73f1",
+        "android_client_info": {
+          "package_name": "com.example.flutter_sns_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmeC7Ksogrceg1pkBKeIg2tmNAdphj_x8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
