@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_sns_app/constants/routes.dart' as routes;
 import 'package:flutter_sns_app/firebase_options.dart';
 import 'package:flutter_sns_app/models/main_model.dart';
+import 'package:flutter_sns_app/views/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,30 +14,36 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final MainModel mainModel = ref.watch(mainProvider);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: mainModel.currentUser == null
+          ? LoginPage(mainModel: mainModel)
+          : MyHomePage(
+              title: 'Flutter Demo Home Page',
+              mainModel: mainModel,
+            ),
     );
   }
 }
 
-class MyHomePage extends ConsumerWidget {
-  const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key, required this.title, required this.mainModel});
 
   final String title;
+  final MainModel mainModel;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final MainModel mainModel = ref.watch(mainProvider);
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -44,17 +52,13 @@ class MyHomePage extends ConsumerWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          InkWell(
-            child: Icon(Icons.person),
-          ),
-          InkWell(
-            child: Icon(Icons.person),
-          ),
-          Center(
-            child: mainModel.currentUser == null
-                ? const Text('nullです')
-                : const Text('nullじゃないです'),
-          ),
+          ElevatedButton(
+              onPressed: () => routes.toSignupPage(context: context),
+              child: const Text('Signup')),
+          ElevatedButton(
+              onPressed: () =>
+                  routes.toLoginPage(context: context, mainModel: mainModel),
+              child: const Text('Login')),
         ],
       ),
     );
