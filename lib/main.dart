@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_sns_app/constants/routes.dart' as routes;
+import 'package:flutter_sns_app/details/rounded_button.dart';
 import 'package:flutter_sns_app/firebase_options.dart';
 import 'package:flutter_sns_app/models/main_model.dart';
 import 'package:flutter_sns_app/views/login_page.dart';
@@ -14,52 +15,64 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final MainModel mainModel = ref.watch(mainProvider);
+  Widget build(BuildContext context) {
+    // ユーザーがログインしているかどうかの確認
+    final User? userLoggedIn = FirebaseAuth.instance.currentUser;
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: mainModel.currentUser == null
-          ? LoginPage(mainModel: mainModel)
-          : MyHomePage(
-              title: 'Flutter Demo Home Page',
-              mainModel: mainModel,
-            ),
+      home: userLoggedIn == null ? LoginPage() : MyHomePage(title: 'SNS'),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title, required this.mainModel});
+class MyHomePage extends ConsumerWidget {
+  const MyHomePage({
+    super.key,
+    required this.title,
+  });
 
   final String title;
-  final MainModel mainModel;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final MainModel mainModel = ref.watch(mainProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ElevatedButton(
-              onPressed: () => routes.toSignupPage(context: context),
-              child: const Text('Signup')),
-          ElevatedButton(
-              onPressed: () =>
-                  routes.toLoginPage(context: context, mainModel: mainModel),
-              child: const Text('Login')),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // RoundedButton(
+            //   widthRate: 0.5,
+            //   text: "サインアップページ",
+            //   backgroundColor: Colors.orange.shade700,
+            //   onPressed: () => routes.toSignupPage(context: context),
+            // ),
+            Text("現在ログインしているユーザーの名前はアリスです。"),
+            // RoundedButton(
+            //   widthRate: 0.5,
+            //   text: "ログインページ",
+            //   backgroundColor: Colors.deepOrange.shade700,
+            //   onPressed: () => routes.toLoginPage(context: context),
+            // ),
+            RoundedButton(
+                widthRate: 0.85,
+                text: "ログアウトする",
+                onPressed: () => mainModel.logout(context: context, ref: ref),
+                backgroundColor: Colors.grey.shade500)
+          ],
+        ),
       ),
     );
   }

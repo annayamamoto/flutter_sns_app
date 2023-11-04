@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_sns_app/details/rounded_button.dart';
+import 'package:flutter_sns_app/details/rounded_password_field.dart';
+import 'package:flutter_sns_app/details/rounded_text_field.dart';
 import 'package:flutter_sns_app/models/login_model.dart';
-import 'package:flutter_sns_app/models/main_model.dart';
 
 class LoginPage extends ConsumerWidget {
-  const LoginPage({super.key, required this.mainModel});
-
-  final MainModel mainModel;
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,33 +21,32 @@ class LoginPage extends ConsumerWidget {
         title: const Text('login'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          TextFormField(
-            controller: emailEditingController,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (text) => loginModel.email = text,
-          ),
-          TextFormField(
-            controller: passwordEditingController,
-            keyboardType: TextInputType.visiblePassword,
-            onChanged: (text) => loginModel.password = text,
+          RoundedTextField(
+              keyboardType: TextInputType.emailAddress,
+              controller: emailEditingController,
+              color: Colors.grey.shade50,
+              onChanged: (text) => loginModel.email = text,
+              borderColor: Colors.purple.shade300,
+              shadowColor: Colors.purple.shade700),
+          RoundedPasswordField(
+            color: Colors.grey.shade50,
+            borderColor: Colors.purple.shade300,
+            shadowColor: Colors.purple.shade700,
+            passwordEditingController: passwordEditingController,
             obscureText: loginModel.isObscure,
-            decoration: InputDecoration(
-                suffix: InkWell(
-              child: loginModel.isObscure
-                  ? const Icon(Icons.visibility_off)
-                  : const Icon(Icons.visibility),
-              onTap: () => loginModel.toggleIsObscure(),
-            )),
+            onChanged: (text) => loginModel.password = text,
+            toggleObscureText: () => loginModel.toggleIsObscure(),
           ),
+          RoundedButton(
+            text: "ログイン",
+            widthRate: 0.85,
+            backgroundColor: Colors.purple.shade400,
+            onPressed: () async => await loginModel.login(context: context),
+          )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async =>
-            await loginModel.login(context: context, mainModel: mainModel),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

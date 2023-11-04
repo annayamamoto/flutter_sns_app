@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_sns_app/details/rounded_button.dart';
+import 'package:flutter_sns_app/details/rounded_password_field.dart';
+import 'package:flutter_sns_app/details/rounded_text_field.dart';
 import 'package:flutter_sns_app/models/signup_model.dart';
 
 class SignupPage extends ConsumerWidget {
@@ -18,35 +21,33 @@ class SignupPage extends ConsumerWidget {
         title: const Text('signup'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          TextFormField(
-            controller: emailEditingController,
+          RoundedTextField(
             keyboardType: TextInputType.emailAddress,
+            controller: emailEditingController,
             onChanged: (text) => signupModel.email = text,
+            color: Colors.grey.shade50,
+            shadowColor: Colors.deepPurple.shade300,
+            borderColor: Colors.deepPurple.shade700,
           ),
-          TextFormField(
-            controller: passwordEditingController,
-            keyboardType: TextInputType.visiblePassword,
-            onChanged: (text) => signupModel.password = text,
+          RoundedPasswordField(
+            color: Colors.grey.shade50,
+            shadowColor: Colors.deepPurple.shade300,
+            borderColor: Colors.deepPurple.shade700,
+            passwordEditingController: passwordEditingController,
             obscureText: signupModel.isObscure,
-            decoration: InputDecoration(
-                suffix: InkWell(
-              child: signupModel.isObscure
-                  ? const Icon(Icons.visibility_off)
-                  : const Icon(Icons.visibility),
-              onTap: () => signupModel.toggleIsObscure(),
-            )),
+            toggleObscureText: () => signupModel.toggleIsObscure(),
           ),
-          signupModel.currentUser == null
-              ? const Text('nullです')
-              : const Text('nullじゃないです'),
+          RoundedButton(
+            text: "新規登録",
+            widthRate: 0.85,
+            backgroundColor: Colors.deepPurple.shade400,
+            onPressed: () async =>
+                await signupModel.createUser(context: context),
+          )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async => await signupModel.createUser(context: context),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
