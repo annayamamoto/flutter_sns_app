@@ -58,7 +58,7 @@ class MyHomePage extends ConsumerWidget {
         title: Text(title),
       ),
       body: mainModel.isLoading
-          ? const Text("Loading...")
+          ? Text("Loading...")
           : PageView(
               controller: snsBottomNavigationModel.pageController,
               onPageChanged: (index) =>

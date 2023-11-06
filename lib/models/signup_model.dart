@@ -22,7 +22,8 @@ class SignupMainModel extends ChangeNotifier {
         updatedAt: now,
         email: email,
         userName: "Alice",
-        uid: uid);
+        uid: uid,
+        userImageURL: "");
     final Map<String, dynamic> userData = fireStoreUser.toJson();
     await FirebaseFirestore.instance.collection('users').doc(uid).set(userData);
     ScaffoldMessenger.of(context)

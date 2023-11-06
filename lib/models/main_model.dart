@@ -27,7 +27,7 @@ class MainModel extends ChangeNotifier {
         .collection("users")
         .doc(currentUser!.uid)
         .get();
-    FirestoreUser.fromJson(currentUserDoc.data()!);
+    firestoreUser = FirestoreUser.fromJson(currentUserDoc.data()!);
     endLoading();
   }
 
@@ -38,6 +38,7 @@ class MainModel extends ChangeNotifier {
 
   void endLoading() {
     isLoading = false;
+    notifyListeners();
   }
 
   void setCurrentUser() {
