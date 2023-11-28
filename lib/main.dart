@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sns_app/details/sns_bottom_navigation.dart';
+import 'package:flutter_sns_app/details/sns_drawer.dart';
 import 'package:flutter_sns_app/firebase_options.dart';
 import 'package:flutter_sns_app/models/main_model.dart';
 import 'package:flutter_sns_app/models/sns_bottom_navigation_model.dart';
@@ -57,8 +58,9 @@ class MyHomePage extends ConsumerWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
       ),
+      drawer: SNSDrawer(mainModel: mainModel),
       body: mainModel.isLoading
-          ? Text("Loading...")
+          ? const Text("Loading...")
           : PageView(
               controller: snsBottomNavigationModel.pageController,
               onPageChanged: (index) =>
@@ -69,35 +71,6 @@ class MyHomePage extends ConsumerWidget {
                 ProfileScreen(mainModel: mainModel),
               ],
             ),
-      // Center(
-      //         child: Column(
-      //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //           children: [
-      //             // RoundedButton(
-      //             //   widthRate: 0.5,
-      //             //   text: "サインアップページ",
-      //             //   backgroundColor: Colors.orange.shade700,
-      //             //   onPressed: () => routes.toSignupPage(context: context),
-      //             // ),
-      //             // RoundedButton(
-      //             //   widthRate: 0.5,
-      //             //   text: "ログインページ",
-      //             //   backgroundColor: Colors.deepOrange.shade700,
-      //             //   onPressed: () => routes.toLoginPage(context: context),
-      //             // ),
-      //             Center(
-      //               child: Text(
-      //                   "私の作成日は${mainModel.currentUserDoc["createdAt"].toString()}です。"),
-      //             ),
-      //             RoundedButton(
-      //                 widthRate: 0.85,
-      //                 text: "ログアウトする",
-      //                 onPressed: () =>
-      //                     mainModel.logout(context: context, ref: ref),
-      //                 backgroundColor: Colors.grey.shade500)
-      //           ],
-      //         ),
-      //       ),
       bottomNavigationBar: SnsBottomNavigation(
         snsBottomNavigationModel: snsBottomNavigationModel,
       ),
